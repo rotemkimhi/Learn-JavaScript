@@ -1,2 +1,2 @@
-# moveo-git
- hw
+open terminal
+npm start
