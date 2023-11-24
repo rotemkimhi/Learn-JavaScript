@@ -1,0 +1,84 @@
+<!-- palindrome.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check Palindrome</title>
+</head>
+<body>
+  <p id="hello-message"></p>
+  <h1>Check Palindrome</h1>
+  <!-- Shared Text Box -->
+  <textarea id="sharedTextBox" rows="10" cols="100">
+function isPalindrome(str) {
+  const reversed = str.split("").reverse().join("");
+  return ; // complete return statement
+}
+  </textarea>
+  <div id="room-users-list"></div>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script type="module">
+    import { getRoomIdFromUrl, updateRoomUsersUI } from '../helpers.js';
+
+    const socket = io('http://localhost:3000');
+    let userType;
+    const sharedTextBox = document.getElementById('sharedTextBox'); 
+
+    // students have privilleges
+    socket.on('userType', (receivedUserType) => {
+      userType = receivedUserType; // Set userType when received from the server
+      
+      if (userType === 'Student') {
+        // Allow editing for students
+        sharedTextBox.style.display = 'block'; // Show the text box
+        sharedTextBox.addEventListener('input', (event) => {
+          // Emit the text change event when the student types
+          socket.emit('textChange', { text: event.target.value });
+        });
+      } else {
+        // Disable editing for mentors
+        sharedTextBox.disabled = true;
+      }
+    });
+
+    // connection to server
+    socket.on('connect', () => {
+      console.log('Connected to server');
+      // Attempt to reconnect with the room ID from the URL
+      const roomId = getRoomIdFromUrl();
+      console.log('Room ID from URL:', roomId);
+      if (roomId) {
+        // Join the room using the extracted room ID
+        socket.emit('joinRoom', roomId);
+        // Emit the room ID to the mentor
+        if (userType === 'Student') {
+          socket.emit('roomJoined', roomId);
+        }
+      }
+    });
+
+    // what to do when the student writes
+    socket.on('textChange', (data) => {
+      console.log('Received textChange data:', data);
+      sharedTextBox.value = data.text;
+    });
+
+    //follow who is in the room
+    socket.on('updateRoomUsers', (users) => {
+      console.log('Received updated room user list:', users);
+      updateRoomUsersUI(users, socket);
+    });
+
+    // handle a user who wants to leave a room
+    socket.on('leaveRoom', (updatedUsers) => {
+      console.log('Received leaveRoom event for room:', updatedUsers);
+      // Handle the leaveRoom event, if needed
+      // You can update the UI or perform any other necessary actions
+      updateRoomUsersUI(updatedUsers);
+    });
+
+  </script>
+</body>
+</html>

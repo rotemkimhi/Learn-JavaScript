@@ -1,0 +1,64 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moveo App</title>
+  <style>
+    .code-block-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .code-block-list-item {
+      cursor: pointer;
+      margin-bottom: 10px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 150px;
+    }
+    .code-block-list-item:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <p id="hello-message"></p>
+  <h1>Choose code block</h1>
+  <ul id="code-block-list" class="code-block-list"></ul>
+  <div id="active-users-list"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module">
+
+    import { displayActiveUsers, displayCodeBlocks, generateRoomId} from '/helpers.js';
+
+    const socket = io('http://localhost:3000');
+
+    let roomCounter = 1;
+
+    //handle disconnect
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+
+    //handle error
+    socket.on('error', (error) => {
+      console.error('Socket error:', error);
+    });
+
+    //handle user connecting
+    socket.on('userConnected', ({users, socketId}) => {
+      console.log('Received updated user list:', users);
+      displayActiveUsers(users, socket);
+    });
+
+    // display the code-blocks
+    socket.on('codeBlocks', (codeBlocks) => {
+      console.log('Received code blocks:', codeBlocks);
+      displayCodeBlocks(codeBlocks, roomCounter);
+    });
+
+  </script>
+</body>
+</html>
