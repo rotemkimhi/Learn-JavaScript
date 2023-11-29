@@ -1,7 +1,7 @@
 {
   "name": "moveo-app",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "server.js",
   "engines": {
     "node": "18.x"
   },
