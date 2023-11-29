@@ -1,6 +1,7 @@
 //server.js
 
 const express = require('express');
+const serverless = require('serverless-http');
 const mongoose = require("mongoose");
 const http = require('http');
 const app = express();
@@ -11,6 +12,9 @@ const codeBlocks = require(`./codeBlocks`);
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 const io = require('socket.io')(server);
+const codeBlockRouter = require('./codeBlockRouter.js');
+app.use('/code-block', codeBlockRouter);
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'blocks')));
 app.use(express.static(path.join(__dirname)));
@@ -31,19 +35,6 @@ const availableUsers = [
   { name: 'Tom', type: 'Mentor', active: false, socketId: null, room: null },
   { name: 'Josh', type: 'Student', active: false, socketId: null, room: null }
 ];
-
-// Routing to code blocks
-app.get("/code-block/:id", (req, res) => {
-  const blockId = parseInt(req.params.id);
-  const selectedBlock = codeBlocks.find(block => block.id === blockId);
-
-  if (!selectedBlock) {
-    res.status(404).send('Code block not found');
-    return;
-  }
-
-  res.sendFile(path.join(__dirname, `blocks/${selectedBlock.name}.html`));
-});
 
 // Connection to socket
 io.on('connection', (socket) => {
@@ -125,9 +116,7 @@ server.listen(port, () => {
   console.log(`Server is running on port http://localhost:3000`);
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
+
 
 //all server functions
 
@@ -169,3 +158,5 @@ function getRoomUsers(roomId) {
 
   return roomUsers;
 }
+
+module.exports.handler = serverless(app);
