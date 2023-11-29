@@ -1,35 +1,4 @@
-// helpers.js
-
-
-// all the functions on the blocks pages
-
-function getRoomIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('roomId');
-}
-
-function updateRoomUsersUI(users, socket) {
-    const roomUsersList = document.getElementById('room-users-list');
-    roomUsersList.innerHTML = '';
-
-    const heading = document.createElement('p');
-    heading.textContent = 'Active users:';
-    roomUsersList.appendChild(heading);
-
-    for (const user of users) {
-      if (user.active) {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${user.name} - ${user.type}`;
-        roomUsersList.appendChild(listItem);
-
-        // Check if the user is the current user based on their socket ID
-        if (user.socketId === socket.id) {
-          const helloMessage = document.getElementById('hello-message');
-          helloMessage.textContent = `Hello ${user.name}!`;
-        }
-      }
-    }
-  }
+// index-helpers.js
 
   // all the functions from the index.html page
   function displayActiveUsers(users, socket) {
@@ -81,4 +50,4 @@ function generateRoomId(id) {
 }
 
 
-  export { getRoomIdFromUrl, updateRoomUsersUI, displayActiveUsers, displayCodeBlocks, generateRoomId };
+  export { displayActiveUsers, displayCodeBlocks, generateRoomId };

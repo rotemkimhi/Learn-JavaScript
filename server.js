@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
     currentUser.active = true;
     currentUser.socketId = socketId;
 
-    //handle
+    // Handle connection
     io.emit('userConnected', { users: availableUsers, socketId });
     
     // Emit user type to the connected client
@@ -107,6 +107,12 @@ io.on('connection', (socket) => {
       if (currentUser.type === 'Student') {
         io.to(currentUser.room).emit('textChange', text);
       }
+    });
+
+    socket.on('sendAnswer', (data) => {
+      const content = data.content; // Access the content from the payload
+      console.log("Message received:", content);
+      socket.to(currentUser.room).emit('receivedAnswer');
     });
 
   // Handle the case when there are no available users
