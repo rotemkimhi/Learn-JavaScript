@@ -15,15 +15,32 @@ function reverseString(str) {
   return ; // complete return statement
 }
   </textarea>
-  <button id="sendButton" onclick="sendMessage()" style="display: none;">Send</button>
+  <button id="sendButton" onclick="submitAnswer()" style="display: none;">Send</button>
   <p id="feedback" style="display: none;"></p>
   <div id="room-users-list"></div>
   <script src="/socket.io/socket.io.js"></script>
 
   <script type="module">
-    import { getRoomIdFromUrl, updateRoomUsersUI, initializeCommonBehavior } from '/block-helpers.js';
+    import {displayBigSmiley, getRoomIdFromUrl, updateRoomUsersUI, initializeCommonBehavior } from '/block-helpers.js';
     const socket = io();
     initializeCommonBehavior(socket);
+    window.submitAnswer = function() {
+      console.log(`Testing submission`);
+      const feedbackElement = document.getElementById('feedback');
+      const sharedTextBox = document.getElementById('sharedTextBox');
+      const message = sharedTextBox.value.toString();
+      const receivedFunction = eval(`(${message})`);
+      const result = receivedFunction("Code is like humor. When you have to explain it, it's bad.");
+      if (result === ".dab s'ti ,ti nialpxe ot evah uoy nehW .romuh ekil si edoC") {
+          feedbackElement.innerHTML = 'Mentor: Good job!';
+          displayBigSmiley();
+        }
+        else{
+          feedbackElement.innerHTML = 'Mentor: Wrong answer, try again';
+        }
+        socket.emit(`sendAnswer`, {content: feedbackElement.innerHTML});
+        feedbackElement.style.display = 'block';
+    }
   </script>
 </body>
 </html>

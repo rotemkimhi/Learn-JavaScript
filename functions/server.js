@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
       io.to(roomId).emit('updateRoomUsers', getRoomUsers(roomId));
     });
 
-    //when somone leaves a room
+    // When somone leaves a room
     socket.on('leaveRoom', (roomId) => {
       console.log(`${currentUser.name} left ${roomId}`);
       socket.leave(roomId);

@@ -12,19 +12,37 @@
   <!-- Shared Text Box -->
   <textarea id="sharedTextBox" rows="10" cols="100">
 function factorial(num) {
-  if ; // complete if statment
+  if ; // complete if statement
   return num * factorial(num - 1);
 }
   </textarea>
-  <button id="sendButton" onclick="sendMessage()" style="display: none;">Send</button>
+  <button id="sendButton" onclick="submitAnswer()" style="display: none;">Send</button>
   <p id="feedback" style="display: none;"></p>
   <div id="room-users-list"></div>
   <script src="/socket.io/socket.io.js"></script>
 
   <script type="module">
-    import { getRoomIdFromUrl, updateRoomUsersUI, initializeCommonBehavior } from '/block-helpers.js';
+    import {displayBigSmiley, getRoomIdFromUrl, updateRoomUsersUI, initializeCommonBehavior } from '/block-helpers.js';
     const socket = io();
     initializeCommonBehavior(socket);
+
+    window.submitAnswer = function() {
+      console.log(`Testing submission`);
+      const feedbackElement = document.getElementById('feedback');
+      const sharedTextBox = document.getElementById('sharedTextBox');
+      const message = sharedTextBox.value.toString();
+      const receivedFunction = eval(`(${message})`);
+      const result = receivedFunction(11);
+      if (result === 39916800) {
+          feedbackElement.innerHTML = 'Mentor: Good job!';
+          displayBigSmiley();
+        }
+        else{
+          feedbackElement.innerHTML = 'Mentor: Wrong answer, try again';
+        }
+        socket.emit(`sendAnswer`, {content: feedbackElement.innerHTML});
+        feedbackElement.style.display = 'block';
+    }
   </script>
 </body>
 </html>
