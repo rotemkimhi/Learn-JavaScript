@@ -4,10 +4,9 @@ const express = require('express');
 const path = require('path');
 const codeBlocks = require(`./codeBlocks`);
 const router = express.Router();
+const rootDirectory = 'C:/Users/akimh/Desktop/projects/moveo-git/';
 
-router.get("/", (req, res) => {
-    res.sendFile(__dirname + '/public/mainPage.html');
-  });
+
 
 router.get("/:id", (req, res) => {
     const blockId = parseInt(req.params.id);
@@ -18,7 +17,7 @@ router.get("/:id", (req, res) => {
       return;
     }
   
-    res.sendFile(path.join(__dirname, `blocks/${selectedBlock.name}.html`));
+    res.sendFile(path.join(rootDirectory, `blocks/${selectedBlock.name}.html`));
   });
   
   module.exports = router;

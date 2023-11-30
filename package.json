@@ -1,13 +1,10 @@
 {
   "name": "moveo-app",
   "version": "1.0.0",
-  "main": "server.js",
-  "engines": {
-    "node": "18.x"
-  },
+  "main": "functions/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js --w",
+    "start": "nodemon functions/server.js --w",
     "build": "netlify deploy --prod"
   },
   "keywords": [],
@@ -19,8 +16,8 @@
     "i": "^0.3.7",
     "mongoose": "^8.0.1",
     "socket.io": "^4.7.2",
-    "netlify-cli": "12.7.2",
-    "netlify-lambda": "2.0.15",
+    "netlify-cli": "17.8.1",
+    "netlify-lambda": "2.0.16",
     "serverless-http": "3.2.0"
   },
   "devDependencies": {

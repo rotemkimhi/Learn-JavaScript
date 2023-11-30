@@ -6,21 +6,29 @@ const mongoose = require("mongoose");
 const http = require('http');
 const app = express();
 const path = require('path');
-const users = require('./users');
-const codeBlocks = require(`./codeBlocks`);
+const users = require('./users.js');
+const codeBlocks = require(`./codeBlocks.js`);
 
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 const io = require('socket.io')(server);
 const codeBlockRouter = require('./codeBlockRouter.js');
+const rootDirectory = path.resolve(`${__dirname}/..`);
+
+const pathRe = path.resolve(`${__dirname}/..`);
+console.log(`${pathRe}`);
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(rootDirectory, 'public', 'mainPage.html'));
+});
+
 app.use('/code-block', codeBlockRouter);
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'blocks')));
+app.use(express.static(path.join(rootDirectory, 'public')));
+app.use(express.static(path.join(rootDirectory, 'blocks')));
 app.use(express.static(path.join(__dirname)));
 
 const uri = 'mongodb+srv://rotemkim:<yAiXqlppcF3SX0gQ>@cluster0.pv1o5s0.mongodb.net/?retryWrites=true&w=majority';
-
 async function connect(){
   try{
     await mongoose.connect(uri);
@@ -29,7 +37,6 @@ async function connect(){
     console.error(error);
   }
 }
-
 // Initialize users with an array of available users
 const availableUsers = [
   { name: 'Tom', type: 'Mentor', active: false, socketId: null, room: null },
@@ -114,6 +121,7 @@ io.on('connection', (socket) => {
 
 server.listen(port, () => {
   console.log(`Server is running on port http://localhost:3000`);
+  
 });
 
 
