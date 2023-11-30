@@ -23,7 +23,7 @@ if (n <= 1) return n;
 
   <script type="module">
     import {displayBigSmiley, getRoomIdFromUrl, updateRoomUsersUI, initializeCommonBehavior } from '/block-helpers.js';
-    const socket = io('http://localhost:3000');
+    const socket = io();
     initializeCommonBehavior(socket);
 
     window.submitAnswer = function() {

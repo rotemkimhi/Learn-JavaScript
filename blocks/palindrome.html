@@ -23,7 +23,7 @@ function isPalindrome(str) {
 
   <script type="module">
     import { getRoomIdFromUrl, updateRoomUsersUI, initializeCommonBehavior } from '/block-helpers.js';
-    const socket = io('http://localhost:3000');
+    const socket = io();
     initializeCommonBehavior(socket);
   </script>
 </body>
