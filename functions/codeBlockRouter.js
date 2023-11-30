@@ -4,7 +4,7 @@ const express = require('express');
 const path = require('path');
 const codeBlocks = require(`./codeBlocks`);
 const router = express.Router();
-const rootDirectory = 'C:/Users/akimh/Desktop/projects/moveo-git/';
+const rootDirectory = path.resolve(`${__dirname}/..`);
 
 
 
