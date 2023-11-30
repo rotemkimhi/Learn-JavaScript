@@ -10,7 +10,7 @@ const users = require('./users.js');
 const codeBlocks = require(`./codeBlocks.js`);
 
 const server = http.createServer(app);
-const port = 80;
+const port = process.env.PORT || 3000;
 const io = require('socket.io')(server);
 const codeBlockRouter = require('./codeBlockRouter.js');
 const rootDirectory = path.resolve(`${__dirname}/..`);
@@ -120,7 +120,7 @@ io.on('connection', (socket) => {
 });
 
 server.listen(port, () => {
-  console.log(`Server is running on port http://localhost:${port}`);
+  console.log(`Server is running on port http://localhost:3000`);
   
 });
 
