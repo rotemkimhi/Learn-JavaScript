@@ -33,8 +33,8 @@
 
     import { displayActiveUsers, displayCodeBlocks, generateRoomId} from '/index-helpers.js';
 
-    const socket = io('http://localhost:3000');
-
+    //const socket = io('http://localhost:3000');
+    const socket = io();
     let roomCounter = 1;
 
     //handle disconnect
