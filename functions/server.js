@@ -1,7 +1,7 @@
 //server.js
 
 const express = require('express');
-const serverless = require('serverless-http');
+
 const mongoose = require("mongoose");
 const http = require('http');
 const app = express();
@@ -166,5 +166,3 @@ function getRoomUsers(roomId) {
 
   return roomUsers;
 }
-
-module.exports.handler = serverless(app);
