@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moveo App</title>
+  <title>My App</title>
   <style>
     .code-block-list {
       list-style-type: none;
@@ -28,16 +28,20 @@
   <h1>Choose code block</h1>
   <ul id="code-block-list" class="code-block-list"></ul>
   <div id="active-users-list"></div>
+  <button id="disconnect-button">Disconnect</button> <!-- Add disconnect button -->
   <script src="/socket.io/socket.io.js"></script>
   <script type="module">
 
     import { displayActiveUsers, displayCodeBlocks, generateRoomId} from '/index-helpers.js';
-
-    //const socket = io('http://localhost:3000');
+  
+    let rootDirectory1;
     const socket = io();
-    let roomCounter = 1;
-
-    //handle disconnect
+    socket.on('serverReady', (currentUser, users, socketId, rootDirectory) => {
+      rootDirectory1 = rootDirectory;
+      document.getElementById('disconnect-button').addEventListener('click', disconnectAndRedirect);
+      console.log('Received updated user list:', users);
+      displayActiveUsers(users, socket);
+        //handle disconnect
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
     });
@@ -47,18 +51,37 @@
       console.error('Socket error:', error);
     });
 
-    //handle user connecting
-    socket.on('userConnected', ({users, socketId}) => {
-      console.log('Received updated user list:', users);
-      displayActiveUsers(users, socket);
-    });
+    
 
     // display the code-blocks
     socket.on('codeBlocks', (codeBlocks) => {
       console.log('Received code blocks:', codeBlocks);
-      displayCodeBlocks(codeBlocks, roomCounter);
+      displayCodeBlocks(codeBlocks);
+    });
+    
+    socket.on('updateActiveUsers', ({activeUsers}) => {
+      console.log(activeUsers);
+      displayActiveUsers(activeUsers, socket);
     });
 
+    socket.on('redirect', (rootDirectory, loginPage, callback) => {
+      window.location.href = `${rootDirectory}${loginPage}`;
+      callback(true);
+    });
+
+    });
+
+    const disconnectAndRedirect = () => {
+        // Disconnect the socket
+        socket.disconnect();
+        
+        // Delete the cookie (replace 'username' with your actual cookie name)
+        document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+
+        // Redirect to the desired page (replace '/public/firstPage.html' with your desired path)
+        window.location.href = `${window.location.origin}/../public/firstPage.html`;
+      };
+    
   </script>
 </body>
 </html>

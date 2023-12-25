@@ -34,11 +34,11 @@ if (n <= 1) return n;
       const receivedFunction = eval(`(${message})`);
       const result = receivedFunction(16);
       if (result === 987) {
-          feedbackElement.innerHTML = 'Mentor: Good job!';
+          feedbackElement.innerHTML = 'Teacher: Good job!';
           displayBigSmiley();
         }
         else{
-          feedbackElement.innerHTML = 'Mentor: Wrong answer, try again';
+          feedbackElement.innerHTML = 'Teacher: Wrong answer, try again';
         }
         socket.emit(`sendAnswer`, {content: feedbackElement.innerHTML});
         feedbackElement.style.display = 'block';

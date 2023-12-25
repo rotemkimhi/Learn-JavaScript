@@ -4,17 +4,19 @@
   "main": "functions/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon functions/server.js --w",
-    "build": "netlify deploy --prod"
+    "start": "nodemon functions/server.js --w"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie": "^0.6.0",
+    "cookie-parser": "^1.4.6",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "i": "^0.3.7",
-    "mongoose": "^8.0.1",
+    "mongoose": "^8.0.3",
     "socket.io": "^4.7.2"
   },
   "devDependencies": {

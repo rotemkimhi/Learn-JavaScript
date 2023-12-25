@@ -1,9 +1,9 @@
 // codeBlockRouter.js
 
 const express = require('express');
-const path = require('path');
 const codeBlocks = require(`./codeBlocks`);
 const router = express.Router();
+const path = require('path');
 const rootDirectory = path.resolve(`${__dirname}/..`);
 
 

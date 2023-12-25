@@ -4,26 +4,33 @@
   function displayActiveUsers(users, socket) {
     const activeUsersList = document.getElementById('active-users-list');
     activeUsersList.innerHTML = '';
-
+  
     // Add a heading with a class for styling
     const heading = document.createElement('p');
     heading.textContent = 'Active users:';
     activeUsersList.appendChild(heading);
-
+  
+    // Ensure users is an array before attempting to iterate
+    if (!Array.isArray(users)) {
+      console.error('Invalid users data:', users);
+      return;
+    }
+  
     for (const user of users) {
-      if (user.active) {
+      if (user && user.active) {
         const listItem = document.createElement('li');
-        listItem.textContent = `${user.name} - ${user.type}`;
+        listItem.textContent = `${user.username} - ${user.userType}`;
         activeUsersList.appendChild(listItem);
-
+  
         // Check if the user is the current user based on their socket ID
         if (user.socketId === socket.id) {
           const helloMessage = document.getElementById('hello-message');
-          helloMessage.textContent = `Hello ${user.name}!`;
+          helloMessage.textContent = `Hello ${user.username}!`;
         }
       }
     }
   }
+  
 
   function displayCodeBlocks(codeBlocks) {
     const codeBlockList = document.getElementById('code-block-list');
